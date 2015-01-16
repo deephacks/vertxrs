@@ -1,5 +1,6 @@
 package org.deephacks.vertxrs;
 
+import org.jboss.resteasy.plugins.providers.jackson.Jackson2JsonpInterceptor;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
@@ -16,11 +17,14 @@ public class Resteasy extends Application {
     this.services.add(new AsyncJaxrsResource());
     this.services.add(new Resource());
     this.services.add(new ExceptionMapperTest.ExceptionMapperResource());
+    this.services.add(new JsonpTest.JsonpResource());
     for (Object service : services) {
       this.services.add(service);
     }
     ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();
+
     factory.registerProviderInstance(new ExceptionMapperTest.ExceptionMapper());
+    factory.registerProviderInstance(new Jackson2JsonpInterceptor());
     deployment.setProviderFactory(factory);
   }
 

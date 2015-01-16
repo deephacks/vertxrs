@@ -34,6 +34,15 @@ public class BaseTest {
     return client.newCall(req).execute();
   }
 
+  static Response GET(String path, String header, String value) throws IOException {
+    Request req = new Request.Builder().get()
+            .url(config.getHttpHostPortUrl(path))
+            .header(header, value)
+            .build();
+    return client.newCall(req).execute();
+  }
+
+
   static Response POST(String path, String body) throws IOException {
     Request req = new Request.Builder()
             .post(RequestBody.create(APPLICATION_JSON, body))

@@ -1,7 +1,5 @@
 package org.deephacks.vertxrs;
 
-
-import org.jboss.resteasy.spi.ApplicationException;
 import org.junit.Test;
 
 import javax.ws.rs.ForbiddenException;
@@ -9,7 +7,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.ServiceUnavailableException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
@@ -44,9 +41,9 @@ public class ExceptionMapperTest extends BaseTest {
       } else if (ForbiddenException.class.isAssignableFrom(exception.getClass())) {
         return javax.ws.rs.core.Response.status(403).build();
       } else if (RuntimeException.class.isAssignableFrom(exception.getClass())) {
-        return javax.ws.rs.core.Response.serverError().build();
+        throw (RuntimeException) exception;
       }
-      return null;
+      throw new RuntimeException(exception);
     }
   }
 

@@ -2,11 +2,14 @@ package org.deephacks.vertxrs;
 
 
 import org.jboss.resteasy.core.SynchronousDispatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
 
 public class VertxResteasyHandler implements Handler<Buffer> {
+  private Logger logger = LoggerFactory.getLogger(VertxResteasyHandler.class);
   private HttpServerRequest httpRequest;
   private SynchronousDispatcher dispatcher;
 
@@ -26,6 +29,7 @@ public class VertxResteasyHandler implements Handler<Buffer> {
         httpRequest.response().end(response.getBuffer());
       }
     } catch (Exception e) {
+      logger.warn("", e);
       httpRequest.response().headers().clear();
       httpRequest.response().setStatusCode(500);
       httpRequest.response().end();
