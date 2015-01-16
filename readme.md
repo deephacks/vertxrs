@@ -1,7 +1,17 @@
 # vertxrs
 [![Build Status](https://travis-ci.org/deephacks/vertxrs.svg?branch=master)](https://travis-ci.org/deephacks/vertxrs)
 
-JAX-RS with Vert.x
+Building JAX-RS applications with Vert.x comes with a few advantages. 
+
+* Everybody knows JAX-RS.
+* Fast and asynchronous by nature.
+* Very few dependencies and only a few megabytes in size.
+* Unnoticeable application startup time.
+* SockJs and Websocket support.
+* Support for writing custom TCP clients and servers.
+* Clustered event bus.
+
+### Example
 
 
 ```java
