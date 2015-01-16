@@ -8,7 +8,9 @@ Building JAX-RS applications with Vert.x comes with a few advantages.
 * Very few dependencies and only a few megabytes in size.
 * Unnoticeable application startup time.
 * SockJs and Websocket support.
-* Support for writing custom TCP clients and servers.
+* Java 8 and RxJava friendly.
+* Static file serving support.
+* Support for writing extremely fast binary TCP clients and servers.
 * Clustered event bus.
 
 ### Example
