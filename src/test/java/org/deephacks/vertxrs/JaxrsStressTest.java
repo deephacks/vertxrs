@@ -1,18 +1,9 @@
 package org.deephacks.vertxrs;
 
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 import org.deephacks.vertxrs.TestResource.Data;
 import org.jboss.resteasy.spi.ResteasyDeployment;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.vertx.java.core.Handler;
 import org.vertx.java.core.Vertx;
-import org.vertx.java.core.VertxFactory;
-import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpClient;
 
 import javax.ws.rs.Consumes;
@@ -98,14 +89,6 @@ public class JaxrsStressTest {
     @Produces(MediaType.APPLICATION_JSON)
     public Data sync(Data data) {
       return data;
-    }
-  }
-
-  private void sleep(long time) {
-    try {
-      Thread.sleep(time);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
     }
   }
 }
