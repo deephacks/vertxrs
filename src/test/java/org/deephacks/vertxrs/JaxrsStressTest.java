@@ -33,7 +33,7 @@ import static org.junit.Assert.assertThat;
 
 public class JaxrsStressTest {
   static VertxRsServer vertxrs;
-  static int connections = Runtime.getRuntime().availableProcessors() * 100;
+  static int connections = Runtime.getRuntime().availableProcessors() * 50;
 
   static {
     ResteasyDeployment deployment = new ResteasyDeployment();
@@ -55,13 +55,22 @@ public class JaxrsStressTest {
 
   @Test
   public void stressTestAsync() throws Exception {
+    execute("async");
+  }
+
+  @Test
+  public void stressTestSync() throws Exception {
+    execute("sync");
+  }
+
+  private void execute(String path) throws Exception {
     Vertx vertx = vertxrs.getVertx();
-    CountDownLatch latch = new CountDownLatch(connections);
+    CountDownLatch latch = new CountDownLatch(50 * connections);
     for (int j = 0; j < connections; j++) {
       HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
       for (int i = 0; i < 50; i++) {
-        String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) +"\"}";
-        client.post("/stress/async", event -> {
+        String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) + "\"}";
+        client.post("/stress/" + path, event -> {
           if (event.statusCode() != 200) {
             throw new RuntimeException(String.valueOf(event.statusCode()));
           }
@@ -75,31 +84,6 @@ public class JaxrsStressTest {
     latch.await(10, TimeUnit.SECONDS);
     assertThat(latch.getCount(), is(0L));
   }
-
-
-  @Test
-  public void stressTestSync() throws Exception {
-    Vertx vertx = vertxrs.getVertx();
-    CountDownLatch latch = new CountDownLatch(100 * connections);
-    for (int j = 0; j < connections; j++) {
-      HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
-      for (int i = 0; i < 50; i++) {
-        String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) +"\"}";
-        client.post("/stress/sync", event -> {
-          if (event.statusCode() != 200) {
-            throw new RuntimeException(String.valueOf(event.statusCode()));
-          }
-          latch.countDown();
-        }).putHeader("Content-Type", "application/json")
-          .putHeader("Connection", "Keep-Alive")
-          .putHeader("Content-Length", String.valueOf(json.length()))
-                .write(json).end();
-      }
-    }
-    latch.await(10, TimeUnit.SECONDS);
-    assertThat(latch.getCount(), is(0L));
-  }
-
   @Path("/stress")
   public static class AsyncJaxrsStressResource {
 
