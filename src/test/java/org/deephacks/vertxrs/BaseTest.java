@@ -5,20 +5,20 @@ import com.squareup.okhttp.*;
 import java.io.IOException;
 
 public class BaseTest {
-  static VertxRsServer stiletto;
+  static VertxRsServer vertxrs;
   static MediaType APPLICATION_JSON = MediaType.parse("application/json");
   static OkHttpClient client;
   static Config config;
   static {
-    if (stiletto == null) {
+    if (vertxrs == null) {
       client = new OkHttpClient();
       Services services = Services.newBuilder()
               .withResteasy(new Resteasy().getDeployment())
               .withSockJsService("test", new TestResource())
               .build();
       config = Config.defaultConfig();
-      stiletto = new VertxRsServer(config, services);
-      stiletto.start();
+      vertxrs = new VertxRsServer(config, services);
+      vertxrs.start();
     }
   }
 

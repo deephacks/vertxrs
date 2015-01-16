@@ -15,7 +15,7 @@ public class SockJsTest extends BaseTest {
 
   @Test
   public void testSockJs() {
-    EventBus eventBus = stiletto.getVertx().eventBus();
+    EventBus eventBus = vertxrs.getVertx().eventBus();
     Thread thread = Thread.currentThread();
     AtomicReference<String> result = new AtomicReference<>();
 
