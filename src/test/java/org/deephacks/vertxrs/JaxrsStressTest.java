@@ -24,7 +24,8 @@ import static org.junit.Assert.assertThat;
 
 public class JaxrsStressTest {
   static VertxRsServer vertxrs;
-  static int connections = Runtime.getRuntime().availableProcessors() * 50;
+  static int multiplier = 10;
+  static int connections = Runtime.getRuntime().availableProcessors() * multiplier;
 
   static {
     ResteasyDeployment deployment = new ResteasyDeployment();
@@ -56,10 +57,10 @@ public class JaxrsStressTest {
 
   private void execute(String path) throws Exception {
     Vertx vertx = vertxrs.getVertx();
-    CountDownLatch latch = new CountDownLatch(50 * connections);
+    CountDownLatch latch = new CountDownLatch(multiplier * connections);
     for (int j = 0; j < connections; j++) {
       HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
-      for (int i = 0; i < 50; i++) {
+      for (int i = 0; i < multiplier; i++) {
         String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) + "\"}";
         client.post("/stress/" + path, event -> {
           if (event.statusCode() != 200) {
