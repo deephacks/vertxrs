@@ -61,7 +61,9 @@ public class VertxRsServer {
   }
 
   public void stop() {
-    sockJSServer.close();
+    if (sockJSServer != null) {
+      sockJSServer.close();
+    }
     httpServers.forEach(HttpServer::close);
     vertx.stop();
   }
