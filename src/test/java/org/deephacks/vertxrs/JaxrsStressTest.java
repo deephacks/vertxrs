@@ -59,7 +59,7 @@ public class JaxrsStressTest {
     CountDownLatch latch = new CountDownLatch(connections);
     for (int j = 0; j < connections; j++) {
       HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
-      for (int i = 0; i < 100; i++) {
+      for (int i = 0; i < 50; i++) {
         String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) +"\"}";
         client.post("/stress/async", event -> {
           if (event.statusCode() != 200) {
@@ -83,7 +83,7 @@ public class JaxrsStressTest {
     CountDownLatch latch = new CountDownLatch(100 * connections);
     for (int j = 0; j < connections; j++) {
       HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
-      for (int i = 0; i < 100; i++) {
+      for (int i = 0; i < 50; i++) {
         String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) +"\"}";
         client.post("/stress/sync", event -> {
           if (event.statusCode() != 200) {
