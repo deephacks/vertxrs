@@ -34,6 +34,12 @@ public class ExceptionMapperTest extends BaseTest {
 
     @Override
     public javax.ws.rs.core.Response toResponse(Throwable exception) {
+      if (request.getUri() == null) {
+        throw new RuntimeException("Could not inject request");
+      }
+      if (response == null) {
+        throw new RuntimeException("Could not inject response");
+      }
       if (exception instanceof IllegalArgumentException) {
         return javax.ws.rs.core.Response.status(400).build();
       } else if (ServiceUnavailableException.class.isAssignableFrom(exception.getClass())) {
