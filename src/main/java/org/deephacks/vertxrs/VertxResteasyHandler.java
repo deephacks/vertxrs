@@ -29,7 +29,8 @@ public class VertxResteasyHandler implements Handler<Buffer> {
         httpRequest.response().end(response.getBuffer());
       }
     } catch (Exception e) {
-      logger.warn("", e);
+      logger.warn("Unhandled exception {} {}", e.getClass().getName(), e.getMessage());
+      logger.debug("{}", e);
       httpRequest.response().headers().clear();
       httpRequest.response().setStatusCode(500);
       httpRequest.response().end();

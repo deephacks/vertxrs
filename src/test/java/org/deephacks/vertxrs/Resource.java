@@ -30,7 +30,7 @@ public class Resource {
   @Path("/exception")
   @Produces("text/plain")
   public String exception() {
-    throw new RuntimeException();
+    throw new RuntimeException("THIS IS OK!");
   }
 
   @GET

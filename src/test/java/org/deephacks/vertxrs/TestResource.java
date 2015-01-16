@@ -50,9 +50,14 @@ public class TestResource implements Handler<Message> {
 
   @GET
   @Path("async")
-  public void async(@Suspended final AsyncResponse test) {
-    test.setTimeout(1, TimeUnit.DAYS);
-    responses.add(test);
+  public void async(@Suspended final AsyncResponse response) {
+    response.setTimeout(1, TimeUnit.DAYS);
+    responses.add(response);
+  }
+
+  @POST @Path("asyncJson")
+  public void asyncJsonPost(Data data, @Suspended final AsyncResponse response) {
+    response.resume(data);
   }
 
   @Override
