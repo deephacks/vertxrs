@@ -19,8 +19,12 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_LENGTH;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONNECTION;
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaders.Values.CLOSE;
 
 public class JaxrsStressTest {
   static VertxRsServer vertxrs;
@@ -67,9 +71,9 @@ public class JaxrsStressTest {
             throw new RuntimeException(String.valueOf(event.statusCode()));
           }
           latch.countDown();
-        }).putHeader("Content-Type", "application/json")
-                .putHeader("Connection", "Keep-Alive")
-                .putHeader("Content-Length", String.valueOf(json.length()))
+        }).putHeader(CONTENT_TYPE, "application/json")
+                .putHeader(CONNECTION, "Keep-Alive")
+                .putHeader(CONTENT_LENGTH, String.valueOf(json.length()))
                 .write(json).end();
       }
     }

@@ -50,19 +50,6 @@ public class AsyncJaxrsResource {
   }
 
   @GET
-  @Path("cancelled")
-  public Response getCancelled() {
-    if (cancelled) return Response.noContent().build();
-    else return Response.status(500).build();
-  }
-
-  @PUT
-  @Path("cancelled")
-  public void resetCancelled() {
-    cancelled = false;
-  }
-
-  @GET
   @Produces("text/plain")
   public void get(@Suspended final AsyncResponse response) throws Exception {
     response.setTimeout(200000, TimeUnit.MILLISECONDS);
@@ -118,6 +105,19 @@ public class AsyncJaxrsResource {
       }
     };
     t.start();
+  }
+
+  @GET
+  @Path("cancelled")
+  public Response getCancelled() {
+    if (cancelled) return Response.noContent().build();
+    else return Response.status(500).build();
+  }
+
+  @PUT
+  @Path("cancelled")
+  public void resetCancelled() {
+    cancelled = false;
   }
 
   @GET

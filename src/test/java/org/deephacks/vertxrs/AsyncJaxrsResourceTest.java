@@ -1,7 +1,6 @@
 package org.deephacks.vertxrs;
 
 import com.squareup.okhttp.*;
-import io.netty.handler.codec.http.HttpHeaders;
 import org.junit.*;
 
 import javax.ws.rs.core.Response.Status;
@@ -9,6 +8,10 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONNECTION;
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaders.Values.CLOSE;
 
 
 /**
@@ -70,7 +73,7 @@ public class AsyncJaxrsResourceTest extends BaseTest {
 
       response = GET("/jaxrs/cancel");
       assertEquals(503, response.code());
-
+      Thread.sleep(500);
       response = GET("/jaxrs/cancelled");
       assertEquals(204, response.code());
     }
@@ -80,7 +83,7 @@ public class AsyncJaxrsResourceTest extends BaseTest {
       Response response = GET("/jaxrs/resume/object");
       assertEquals(200, response.code());
       String body = response.body().string();
-      assertEquals(response.header("Content-Type"), "application/xml");
+      assertEquals(response.header(CONTENT_TYPE), "application/xml");
       assertTrue(body.contains("bill"));
       assertTrue(body.contains("xml"));
     }
@@ -98,9 +101,9 @@ public class AsyncJaxrsResourceTest extends BaseTest {
     public void testConnectionCloseHeader() throws Exception {
       Request req = new Request.Builder().get()
               .url(config.getRestHttpHostPortUrl("/jaxrs/empty"))
-              .header("Connection", "close")
+              .header(CONNECTION, CLOSE)
               .build();
       Response response = client.newCall(req).execute();
-      assertEquals(HttpHeaders.Values.CLOSE, response.header("Connection"));
+      assertEquals(CLOSE, response.header(CONNECTION));
     }
 }

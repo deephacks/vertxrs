@@ -3,10 +3,10 @@ package org.deephacks.vertxrs;
 import com.squareup.okhttp.*;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.LockSupport;
 
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONNECTION;
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
+import static io.netty.handler.codec.http.HttpHeaders.Values.CLOSE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -17,7 +17,7 @@ public class TestResourceTest extends BaseTest {
     String body = "{\"name\":\"test\",\"value\":\"value\"}";
     Response response = POST("/test-resource/json", body);
     assertThat(response.body().string(), is(body));
-    assertThat(response.header("Content-Type"), is("application/json"));
+    assertThat(response.header(CONTENT_TYPE), is(APPLICATION_JSON.toString()));
   }
 
   @Test
@@ -33,7 +33,7 @@ public class TestResourceTest extends BaseTest {
             .header("Connection", "close")
             .build();
     Response response = client.newCall(req).execute();
-    assertThat(response.header("Connection"), is("close"));
+    assertThat(response.header(CONNECTION), is(CLOSE));
   }
 
   @Test
@@ -48,7 +48,7 @@ public class TestResourceTest extends BaseTest {
     Response response = client.newCall(req).execute();
     assertThat(response.body().string(), is(body));
     assertThat(response.header("header"), is("value"));
-    assertThat(response.header("Connection"), is("close"));
+    assertThat(response.header(CONNECTION), is(CLOSE));
   }
 
   @Test
