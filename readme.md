@@ -10,7 +10,7 @@ Building JAX-RS applications with Vert.x comes with a few advantages as opposed 
 * Static file serving support for web resources.
 * SockJs and Websocket support.
 * Java 8 and reactive programming friendly.
-* Simple API for writing extremely fast zero-copy binary TCP clients and servers.
+* Simple API for writing extremely fast zero-copy TCP clients and servers.
 * Clustered event bus.
 
 ### Example
@@ -22,7 +22,7 @@ ResteasyDeployment resteasy = new ResteasyDeployment();
 resteasy.setApplication(new Application() {
   @Override
   public Set<Object> getSingletons() {
-    HashSet<Object> singletons = new HashSet<Object>();
+    HashSet<Object> singletons = new HashSet<>();
     singletons.add(new Endpoint());
     return singletons;
   }
@@ -31,7 +31,5 @@ resteasy.setApplication(new Application() {
 Services services = Services.newBuilder()
         .withResteasy(resteasy)
         .build();
-VertxRsServer server = new VertxRsServer(Config.defaultConfig(), services);
-server.start();
-
+new VertxRsServer(Config.defaultConfig(), services).start();
 ```
