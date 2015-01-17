@@ -24,7 +24,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
-import static io.netty.handler.codec.http.HttpHeaders.Values.CLOSE;
 
 public class JaxrsStressTest {
   static VertxRsServer vertxrs;
@@ -32,17 +31,8 @@ public class JaxrsStressTest {
   static int connections = Runtime.getRuntime().availableProcessors() * multiplier;
 
   static {
-    ResteasyDeployment deployment = new ResteasyDeployment();
-    deployment.setApplication(new Application() {
-      @Override
-      public Set<Object> getSingletons() {
-        HashSet<Object> singletons = new HashSet<>();
-        singletons.add(new AsyncJaxrsStressResource());
-        return singletons;
-      }
-    });
     Services services = Services.newBuilder()
-            .withResteasy(deployment)
+            .withResource(new AsyncJaxrsStressResource())
             .build();
     vertxrs = new VertxRsServer
             (Config.newBuilder().withHttpPort(8081).build(), services);

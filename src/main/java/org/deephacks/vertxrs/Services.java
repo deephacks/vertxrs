@@ -2,19 +2,27 @@ package org.deephacks.vertxrs;
 
 import org.jboss.resteasy.core.SynchronousDispatcher;
 import org.jboss.resteasy.spi.ResteasyDeployment;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
 
+import javax.ws.rs.core.Application;
 import java.util.*;
 
 public class Services {
   private final Map<String, Handler<Message>> sockJsServices = new HashMap<>();
-  private final ResteasyDeployment resteasy;
+  private ResteasyDeployment deployment;
 
   private Services(Builder builder) {
     this.sockJsServices.putAll(builder.sockJsServices);
-    this.resteasy = Objects.requireNonNull(builder.resteasy,
-            "ResteasyDeployment must not be null");
+    this.deployment = builder.resteasy;
+    this.deployment.setProviderFactory(builder.factory);
+    this.deployment.setApplication(new Application() {
+      @Override
+      public Set<Object> getSingletons() {
+        return builder.resources;
+      }
+    });
   }
 
   public static Services empty() {
@@ -29,21 +37,28 @@ public class Services {
     return sockJsServices;
   }
 
-  SynchronousDispatcher startResteasy() {
-    resteasy.start();
-    return (SynchronousDispatcher) resteasy.getDispatcher();
+  SynchronousDispatcher startJaxrs() {
+    deployment.start();
+    return (SynchronousDispatcher) deployment.getDispatcher();
   }
 
   public static class Builder {
     private Map<String, Handler<Message>> sockJsServices = new HashMap<>();
-    private ResteasyDeployment resteasy;
+    private ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();
+    private ResteasyDeployment resteasy = new ResteasyDeployment();
+    private Set<Object> resources = new HashSet<>();
 
-    public Builder withResteasy(ResteasyDeployment resteasy) {
-      this.resteasy = resteasy;
+    public Builder withResource(Object resource) {
+      resources.add(resource);
       return this;
     }
 
-    public Builder withSockJsServices(Map<String, Handler<Message>> services) {
+    public Builder withProvider(Object provider) {
+      factory.registerProviderInstance(provider);
+      return this;
+    }
+
+    public Builder withSockJs(Map<String, Handler<Message>> services) {
       sockJsServices = Optional.ofNullable(services).orElse(new HashMap<>());
       return this;
     }

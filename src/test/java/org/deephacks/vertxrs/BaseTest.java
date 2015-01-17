@@ -1,6 +1,7 @@
 package org.deephacks.vertxrs;
 
 import com.squareup.okhttp.*;
+import org.jboss.resteasy.plugins.providers.jackson.Jackson2JsonpInterceptor;
 
 import java.io.IOException;
 
@@ -13,7 +14,15 @@ public class BaseTest {
     if (vertxrs == null) {
       client = new OkHttpClient();
       Services services = Services.newBuilder()
-              .withResteasy(new Resteasy().getDeployment())
+              .withResource(new TestResource())
+              .withResource(new AsyncJaxrsResource())
+              .withResource(new Resource())
+              .withResource(new ExceptionMapperTest.ExceptionMapperResource())
+              .withResource(new JsonpTest.JsonpResource())
+              .withResource(new JaxrsStressTest.AsyncJaxrsStressResource())
+              .withResource(new TypesafeJaxrsTest.TypesafeResource())
+              .withProvider(new ExceptionMapperTest.ExceptionMapper())
+              .withProvider(new Jackson2JsonpInterceptor())
               .withSockJsService("test", new TestResource())
               .build();
       config = Config.defaultConfig();

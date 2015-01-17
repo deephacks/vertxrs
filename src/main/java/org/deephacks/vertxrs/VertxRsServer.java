@@ -77,7 +77,7 @@ public class VertxRsServer {
   }
 
   private Handler<HttpServerRequest> handleBody() {
-    SynchronousDispatcher dispatcher = services.startResteasy();
+    SynchronousDispatcher dispatcher = services.startJaxrs();
     return httpRequest -> {
       if (httpRequest.path().startsWith(config.getJaxrsPath())) {
         httpRequest.bodyHandler(new VertxResteasyHandler(httpRequest, dispatcher));
