@@ -28,19 +28,6 @@ Maven dependency.
 Register a JAX-RS resource and start the server.
 
 ```java
-
-ResteasyDeployment resteasy = new ResteasyDeployment();
-resteasy.setApplication(new Application() {
-  @Override
-  public Set<Object> getSingletons() {
-    HashSet<Object> singletons = new HashSet<>();
-    singletons.add(new Endpoint());
-    return singletons;
-  }
-});
-
-Services services = Services.newBuilder()
-        .withResteasy(resteasy)
-        .build();
+Services services = Services.newBuilder().withResource(new Resource()).build();
 new VertxRsServer(Config.defaultConfig(), services).start();
 ```
