@@ -11,7 +11,7 @@ The combination of JAX-RS and Vert.x comes with a few advantages over convention
 * SockJs and Websocket support.
 * Java 8 and reactive programming friendly.
 * Simple API for writing extremely fast zero-copy TCP clients and servers.
-* Clustered event bus.
+* Clustered, language neutral event bus for IPC and server communication.
 
 ### Example
 
