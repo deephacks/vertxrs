@@ -33,7 +33,7 @@ public class VertxResteasyHandler implements Handler<Buffer> {
       logger.debug("{}", e);
       httpRequest.response().headers().clear();
       httpRequest.response().setStatusCode(500);
-      httpRequest.response().end();
+      httpRequest.response().end("Internal Server Error");
     }
   }
 }

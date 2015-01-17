@@ -54,7 +54,7 @@ public class ExceptionMapperTest extends BaseTest {
   }
 
 
-  @Path("/exception-mapper")
+  @Path("/rest/exception-mapper")
   public static class ExceptionMapperResource {
 
     @GET

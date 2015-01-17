@@ -97,7 +97,7 @@ public class AsyncJaxrsResourceTest extends BaseTest {
     @Test(timeout = REQUEST_TIMEOUT)
     public void testConnectionCloseHeader() throws Exception {
       Request req = new Request.Builder().get()
-              .url(config.getHttpHostPortUrl("/jaxrs/empty"))
+              .url(config.getRestHttpHostPortUrl("/jaxrs/empty"))
               .header("Connection", "close")
               .build();
       Response response = client.newCall(req).execute();

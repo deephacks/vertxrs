@@ -25,7 +25,7 @@ public class Config {
 
   private Config(Builder builder) {
     this.staticRootPath = Optional.ofNullable(builder.staticRootPath).orElse("src/main/web");
-    this.jaxrsPath = Optional.ofNullable(builder.staticRootPath).orElse("rest");
+    this.jaxrsPath = Optional.ofNullable(builder.staticRootPath).orElse("/rest");
     this.sockJsPath = Optional.ofNullable(builder.sockJsPath).orElse("/sockjs");
     this.httpPort = Optional.ofNullable(builder.httpPort).orElse(8080);
     this.httpHost = Optional.ofNullable(builder.httpHost).orElse("localhost");
@@ -65,8 +65,8 @@ public class Config {
     return eventLoops;
   }
 
-  public String getHttpHostPortUrl(String path) {
-    return "http://" + getHttpHost() + ":" + getHttpPort() + path;
+  public String getRestHttpHostPortUrl(String path) {
+    return "http://" + getHttpHost() + ":" + getHttpPort() + getJaxrsPath() + path;
   }
 
   public static class Builder {
@@ -77,7 +77,7 @@ public class Config {
     private Integer httpPort;
     private Integer eventLoops;
 
-    public Builder getStaticRootPath(String path) {
+    public Builder withStaticRootPath(String path) {
       staticRootPath = path;
       return this;
     }

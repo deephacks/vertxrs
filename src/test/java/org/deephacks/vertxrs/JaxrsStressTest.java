@@ -62,7 +62,7 @@ public class JaxrsStressTest {
       HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
       for (int i = 0; i < multiplier; i++) {
         String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) + "\"}";
-        client.post("/stress/" + path, event -> {
+        client.post("/rest/stress/" + path, event -> {
           if (event.statusCode() != 200) {
             throw new RuntimeException(String.valueOf(event.statusCode()));
           }
@@ -76,7 +76,7 @@ public class JaxrsStressTest {
     latch.await(10, TimeUnit.SECONDS);
     assertThat(latch.getCount(), is(0L));
   }
-  @Path("/stress")
+  @Path("/rest/stress")
   public static class AsyncJaxrsStressResource {
 
     @POST @Path("async")

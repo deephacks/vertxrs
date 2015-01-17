@@ -31,7 +31,7 @@ public class JsonpTest extends BaseTest {
     assertThat(response.body().string(), is("javascript(js123)"));
   }
 
-  @Path("/")
+  @Path("/rest")
   public static class JsonpResource {
 
     @GET @Path("json") @Produces(MediaType.APPLICATION_JSON)

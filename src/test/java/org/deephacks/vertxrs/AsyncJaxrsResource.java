@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Inspiration taken from RestEasy
  */
-@Path("/jaxrs")
+@Path("/rest/jaxrs")
 public class AsyncJaxrsResource {
   protected boolean cancelled;
 

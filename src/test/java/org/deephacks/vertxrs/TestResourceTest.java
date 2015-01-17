@@ -29,7 +29,7 @@ public class TestResourceTest extends BaseTest {
   @Test
   public void testClose() throws Exception {
     Request req = new Request.Builder().get()
-            .url(config.getHttpHostPortUrl("/test-resource/simple/1?param=2"))
+            .url(config.getRestHttpHostPortUrl("/test-resource/simple/1?param=2"))
             .header("Connection", "close")
             .build();
     Response response = client.newCall(req).execute();
@@ -41,7 +41,7 @@ public class TestResourceTest extends BaseTest {
     String body = "{\"test\":\"test\"}";
     RequestBody requestBody = RequestBody.create(APPLICATION_JSON, body);
     Request req = new Request.Builder().post(requestBody)
-            .url(config.getHttpHostPortUrl("/test-resource/jaxrs"))
+            .url(config.getRestHttpHostPortUrl("/test-resource/jaxrs"))
             .header("Connection", "close")
             .header("Content-Type", "application/json")
             .build();
@@ -54,7 +54,7 @@ public class TestResourceTest extends BaseTest {
   @Test
   public void testJaxrsInjectHeaders() throws Exception {
     Request req = new Request.Builder().get()
-            .url(config.getHttpHostPortUrl("/test-resource/inject-headers"))
+            .url(config.getRestHttpHostPortUrl("/test-resource/inject-headers"))
             .header("test-header", "value")
             .build();
     Response response = client.newCall(req).execute();

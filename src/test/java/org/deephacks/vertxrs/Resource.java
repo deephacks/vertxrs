@@ -5,7 +5,7 @@ import javax.ws.rs.*;
 /**
  * Inspiration taken from RestEasy
  */
-@Path("/")
+@Path("/rest")
 public class Resource {
   @GET
   @Path("/test")

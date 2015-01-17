@@ -25,18 +25,18 @@ public class BaseTest {
   static Response PUT(String path, String body) throws IOException {
     Request req = new Request.Builder()
             .put(RequestBody.create(APPLICATION_JSON, body))
-            .url(config.getHttpHostPortUrl(path)).build();
+            .url(config.getRestHttpHostPortUrl(path)).build();
     return client.newCall(req).execute();
   }
 
   static Response GET(String path) throws IOException {
-    Request req = new Request.Builder().get().url(config.getHttpHostPortUrl(path)).build();
+    Request req = new Request.Builder().get().url(config.getRestHttpHostPortUrl(path)).build();
     return client.newCall(req).execute();
   }
 
   static Response GET(String path, String header, String value) throws IOException {
     Request req = new Request.Builder().get()
-            .url(config.getHttpHostPortUrl(path))
+            .url(config.getRestHttpHostPortUrl(path))
             .header(header, value)
             .build();
     return client.newCall(req).execute();
@@ -46,7 +46,7 @@ public class BaseTest {
   static Response POST(String path, String body) throws IOException {
     Request req = new Request.Builder()
             .post(RequestBody.create(APPLICATION_JSON, body))
-            .url(config.getHttpHostPortUrl(path))
+            .url(config.getRestHttpHostPortUrl(path))
             .build();
     return client.newCall(req).execute();
   }

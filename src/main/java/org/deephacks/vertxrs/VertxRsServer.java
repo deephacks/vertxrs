@@ -79,11 +79,11 @@ public class VertxRsServer {
   private Handler<HttpServerRequest> handleBody() {
     SynchronousDispatcher dispatcher = services.startResteasy();
     return httpRequest -> {
-      if (httpRequest.uri().endsWith("html") || httpRequest.uri().endsWith("js")) {
+      if (httpRequest.path().startsWith(config.getJaxrsPath())) {
+        httpRequest.bodyHandler(new VertxResteasyHandler(httpRequest, dispatcher));
+      } else {
         File file = new File(config.getStaticRootPath(), httpRequest.path());
         httpRequest.response().sendFile(file.getAbsolutePath());
-      } else {
-        httpRequest.bodyHandler(new VertxResteasyHandler(httpRequest, dispatcher));
       }
     };
   }
