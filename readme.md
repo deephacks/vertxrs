@@ -27,7 +27,18 @@ Maven dependency.
 
 Register a JAX-RS resource and start the server.
 
+
+
 ```java
-Services services = Services.newBuilder().withResource(new Resource()).build();
+@Path("/rest")
+public class Resource {
+  @GET @Path("/foo")  public String foo() { return "bar"; }
+}
+
+Services services = Services.newBuilder()
+        .withResource(new Resource())
+        .build();
 new VertxRsServer(Config.defaultConfig(), services).start();
 ```
+
+
