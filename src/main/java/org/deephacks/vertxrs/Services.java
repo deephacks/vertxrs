@@ -63,7 +63,7 @@ public class Services {
       return this;
     }
 
-    public Builder withSockJsService(String address, Handler<Message> handler) {
+    public Builder withSockJs(String address, Handler<Message> handler) {
       sockJsServices.put(address, handler);
       return this;
     }
