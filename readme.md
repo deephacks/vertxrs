@@ -1,7 +1,7 @@
 # vertxrs
 [![Build Status](https://travis-ci.org/deephacks/vertxrs.svg?branch=master)](https://travis-ci.org/deephacks/vertxrs)
 
-Building JAX-RS applications with Vert.x comes with a few advantages as opposed to conventional Servlet containers.
+The combination of JAX-RS and Vert.x comes with a few advantages over conventional Servlet containers.
 
 * Everybody knows JAX-RS.
 * Fast and asynchronous by nature.
