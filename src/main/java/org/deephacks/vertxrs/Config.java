@@ -65,6 +65,10 @@ public class Config {
     return eventLoops;
   }
 
+  public String getHttpHostPortUrl(String path) {
+    return "http://" + getHttpHost() + ":" + getHttpPort() + path;
+  }
+
   public String getRestHttpHostPortUrl(String path) {
     return "http://" + getHttpHost() + ":" + getHttpPort() + getJaxrsPath() + path;
   }

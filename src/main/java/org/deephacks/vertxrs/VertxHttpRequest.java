@@ -35,7 +35,10 @@ class VertxHttpRequest extends BaseHttpRequest {
     private VertxExecutionContext executionContext;
     private InputStream body;
 
-    public VertxHttpRequest(Buffer body, HttpServerRequest request, VertxHttpResponse response, SynchronousDispatcher dispatcher) {
+    public VertxHttpRequest(Buffer body,
+                            HttpServerRequest request,
+                            VertxHttpResponse response,
+                            SynchronousDispatcher dispatcher) {
       super(new ResteasyUriInfo(request.absoluteURI()));
       this.request = request;
       this.executionContext = new VertxExecutionContext(this, response, dispatcher);

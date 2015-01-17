@@ -19,6 +19,7 @@ public class Resteasy extends Application {
     this.services.add(new ExceptionMapperTest.ExceptionMapperResource());
     this.services.add(new JsonpTest.JsonpResource());
     this.services.add(new JaxrsStressTest.AsyncJaxrsStressResource());
+    this.services.add(new TypesafeJaxrsTest.TypesafeResource());
     for (Object service : services) {
       this.services.add(service);
     }

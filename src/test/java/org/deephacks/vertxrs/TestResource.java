@@ -95,6 +95,26 @@ public class TestResource implements Handler<Message> {
     }
 
     @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+
+      Data data = (Data) o;
+
+      if (name != null ? !name.equals(data.name) : data.name != null) return false;
+      if (value != null ? !value.equals(data.value) : data.value != null) return false;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      int result = name != null ? name.hashCode() : 0;
+      result = 31 * result + (value != null ? value.hashCode() : 0);
+      return result;
+    }
+
+    @Override
     public String toString() {
       return "Data{" +
               "name='" + name + '\'' +
