@@ -15,6 +15,17 @@ The combination of JAX-RS and Vert.x comes with a few advantages over convention
 
 ### Example
 
+Maven dependency.
+
+```xml
+<dependency>
+  <groupId>org.deephacks.vertxrs</groupId>
+  <artifactId>vertxrs</artifactId>
+  <version>${version}</version>
+</dependency>
+```
+
+Register a JAX-RS resource and start the server.
 
 ```java
 
