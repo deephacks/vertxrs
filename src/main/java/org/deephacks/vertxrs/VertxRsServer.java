@@ -14,30 +14,46 @@
 package org.deephacks.vertxrs;
 
 import org.jboss.resteasy.core.SynchronousDispatcher;
+import org.jboss.resteasy.spi.ResteasyDeployment;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.Vertx;
 import org.vertx.java.core.VertxFactory;
+import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.json.JsonArray;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.sockjs.SockJSServer;
 
+import javax.ws.rs.core.Application;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class VertxRsServer {
   private final Vertx vertx;
   private final List<HttpServer> httpServers = new ArrayList<>();
   private final Config config;
-  private final Services services;
+  private final Map<String, Handler<Message>> sockJsServices;
+  private final ResteasyDeployment resteasy;
   private SockJSServer sockJSServer;
 
-  public VertxRsServer(Config config, Services services) {
-    this.config = config;
+  private VertxRsServer(Builder builder) {
+    this.config = Optional.ofNullable(builder.config).orElse(Config.defaultConfig());
+    this.resteasy = builder.resteasy;
+    this.resteasy.setProviderFactory(builder.factory);
+    this.resteasy.setApplication(new Application() {
+      @Override
+      public Set<Object> getSingletons() {
+        return builder.resources;
+      }
+    });
     this.vertx = VertxFactory.newVertx();
-    this.services = services;
+    this.sockJsServices = builder.sockJsServices;
+  }
+
+  public static Builder newBuilder() {
+    return new Builder();
   }
 
   public void start() {
@@ -45,14 +61,13 @@ public class VertxRsServer {
       HttpServer httpServer = vertx.createHttpServer();
       httpServers.add(httpServer);
       httpServer.requestHandler(handleBody());
-      if (!services.getSockJsServices().isEmpty()) {
+      if (!sockJsServices.isEmpty()) {
         JsonObject path = new JsonObject().putString("prefix", config.getSockJsPath());
         JsonArray permitted = new JsonArray();
         // Let everything through
         permitted.add(new JsonObject());
         sockJSServer = vertx.createSockJSServer(httpServer).bridge(path, permitted, permitted);
-        services.getSockJsServices()
-                .forEach((address, handler) -> vertx.eventBus()
+        sockJsServices.forEach((address, handler) -> vertx.eventBus()
                         .registerHandler(address, handler));
       }
       httpServer.listen(config.getHttpPort(), config.getHttpHost());
@@ -61,6 +76,7 @@ public class VertxRsServer {
   }
 
   public void stop() {
+    resteasy.stop();
     if (sockJSServer != null) {
       sockJSServer.close();
     }
@@ -77,7 +93,8 @@ public class VertxRsServer {
   }
 
   private Handler<HttpServerRequest> handleBody() {
-    SynchronousDispatcher dispatcher = services.startJaxrs();
+    resteasy.start();
+    SynchronousDispatcher dispatcher = (SynchronousDispatcher) resteasy.getDispatcher();
     return httpRequest -> {
       if (httpRequest.path().startsWith(config.getJaxrsPath())) {
         httpRequest.bodyHandler(new VertxResteasyHandler(httpRequest, dispatcher));
@@ -87,4 +104,44 @@ public class VertxRsServer {
       }
     };
   }
+
+  public static class Builder {
+    private Map<String, Handler<Message>> sockJsServices = new HashMap<>();
+    private ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();
+    private ResteasyDeployment resteasy = new ResteasyDeployment();
+    private Set<Object> resources = new HashSet<>();
+    private Config config;
+
+    private Builder() {}
+
+    public Builder withResource(Object resource) {
+      resources.add(resource);
+      return this;
+    }
+
+    public Builder withProvider(Object provider) {
+      factory.registerProviderInstance(provider);
+      return this;
+    }
+
+    public Builder withSockJs(Map<String, Handler<Message>> services) {
+      sockJsServices = Optional.ofNullable(services).orElse(new HashMap<>());
+      return this;
+    }
+
+    public Builder withSockJs(String address, Handler<Message> handler) {
+      sockJsServices.put(address, handler);
+      return this;
+    }
+
+    public Builder withConfig(Config config) {
+      this.config = config;
+      return this;
+    }
+
+    public VertxRsServer build() {
+      return new VertxRsServer(this);
+    }
+  }
+
 }

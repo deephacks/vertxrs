@@ -35,10 +35,8 @@ public class Resource {
   @GET @Path("/foo")  public String foo() { return "bar"; }
 }
 
-Services services = Services.newBuilder()
-        .withResource(new Resource())
-        .build();
-new VertxRsServer(Config.defaultConfig(), services).start();
+VertxRsServer.newBuilder().withResource(new Resource()).build().start();
+
 ```
 
 

@@ -9,11 +9,11 @@ public class BaseTest {
   static VertxRsServer vertxrs;
   static MediaType APPLICATION_JSON = MediaType.parse("application/json");
   static OkHttpClient client;
-  static Config config;
+  static Config config = Config.defaultConfig();
   static {
     if (vertxrs == null) {
       client = new OkHttpClient();
-      Services services = Services.newBuilder()
+      vertxrs = VertxRsServer.newBuilder()
               .withResource(new TestResource())
               .withResource(new AsyncJaxrsResource())
               .withResource(new Resource())
@@ -25,8 +25,6 @@ public class BaseTest {
               .withProvider(new Jackson2JsonpInterceptor())
               .withSockJs("test", new TestResource())
               .build();
-      config = Config.defaultConfig();
-      vertxrs = new VertxRsServer(config, services);
       vertxrs.start();
     }
   }

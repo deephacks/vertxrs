@@ -1,7 +1,6 @@
 package org.deephacks.vertxrs;
 
 import org.deephacks.vertxrs.TestResource.Data;
-import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.junit.Test;
 import org.vertx.java.core.Vertx;
 import org.vertx.java.core.http.HttpClient;
@@ -12,10 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -31,11 +27,9 @@ public class JaxrsStressTest {
   static int connections = Runtime.getRuntime().availableProcessors() * multiplier;
 
   static {
-    Services services = Services.newBuilder()
-            .withResource(new AsyncJaxrsStressResource())
-            .build();
-    vertxrs = new VertxRsServer
-            (Config.newBuilder().withHttpPort(8081).build(), services);
+    vertxrs = VertxRsServer.newBuilder()
+            .withConfig(Config.newBuilder().withHttpPort(8081).build())
+            .withResource(new AsyncJaxrsStressResource()).build();
     vertxrs.start();
   }
 
