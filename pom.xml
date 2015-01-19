@@ -5,7 +5,7 @@
   <groupId>org.deephacks.vertxrs</groupId>
   <artifactId>vertxrs</artifactId>
   <name>vertxrs</name>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
   <packaging>jar</packaging>
   <description>Jaxrs for Vert.x</description>
   <url>http://vertxrs.deephacks.org</url>
