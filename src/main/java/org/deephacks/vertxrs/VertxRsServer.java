@@ -61,15 +61,12 @@ public class VertxRsServer {
       HttpServer httpServer = vertx.createHttpServer();
       httpServers.add(httpServer);
       httpServer.requestHandler(handleBody());
-      if (!sockJsServices.isEmpty()) {
-        JsonObject path = new JsonObject().putString("prefix", config.getSockJsPath());
-        JsonArray permitted = new JsonArray();
-        // Let everything through
-        permitted.add(new JsonObject());
-        sockJSServer = vertx.createSockJSServer(httpServer).bridge(path, permitted, permitted);
-        sockJsServices.forEach((address, handler) -> vertx.eventBus()
-                        .registerHandler(address, handler));
-      }
+      JsonObject path = new JsonObject().putString("prefix", config.getSockJsPath());
+      JsonArray permitted = new JsonArray();
+      // Let everything through
+      permitted.add(new JsonObject());
+      sockJSServer = vertx.createSockJSServer(httpServer).bridge(path, permitted, permitted);
+      sockJsServices.forEach((address, handler) -> vertx.eventBus().registerHandler(address, handler));
       httpServer.listen(config.getHttpPort(), config.getHttpHost());
     }
     ShutdownHook.install(new Thread(() -> VertxRsServer.this.stop()));
@@ -98,6 +95,9 @@ public class VertxRsServer {
     return httpRequest -> {
       if (httpRequest.path().startsWith(config.getJaxrsPath())) {
         httpRequest.bodyHandler(new VertxResteasyHandler(httpRequest, dispatcher));
+      } else if(httpRequest.path().equals("/")) {
+        File file = new File(config.getStaticRootPath(), "index.html");
+        httpRequest.response().sendFile(file.getAbsolutePath());
       } else {
         File file = new File(config.getStaticRootPath(), httpRequest.path());
         httpRequest.response().sendFile(file.getAbsolutePath());
@@ -112,7 +112,8 @@ public class VertxRsServer {
     private Set<Object> resources = new HashSet<>();
     private Config config;
 
-    private Builder() {}
+    private Builder() {
+    }
 
     public Builder withResource(Object resource) {
       resources.add(resource);
