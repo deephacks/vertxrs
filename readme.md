@@ -13,6 +13,7 @@ The combination of JAX-RS and Vert.x comes with a few advantages over convention
 * Simple API for writing extremely fast zero-copy TCP clients and servers.
 * Clustered, language neutral event bus for IPC and server communication.
 
+
 ### Example
 
 Maven dependency.
