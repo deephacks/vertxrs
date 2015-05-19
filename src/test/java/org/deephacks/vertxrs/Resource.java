@@ -25,6 +25,12 @@ public class Resource {
     return value;
   }
 
+  @GET
+  @Path("cookie")
+  public String cookie(@CookieParam("cookie") String value, @CookieParam("cookie2") String value2) {
+    return value + " " + value2;
+  }
+
 
   @GET
   @Path("/exception")

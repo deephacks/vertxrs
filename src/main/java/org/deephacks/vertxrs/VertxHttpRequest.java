@@ -17,17 +17,16 @@ import org.jboss.resteasy.core.SynchronousDispatcher;
 import org.jboss.resteasy.plugins.server.BaseHttpRequest;
 import org.jboss.resteasy.specimpl.ResteasyHttpHeaders;
 import org.jboss.resteasy.spi.*;
+import org.jboss.resteasy.util.CookieParser;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
 
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 class VertxHttpRequest extends BaseHttpRequest {
     private HttpServerRequest request;
@@ -53,7 +52,13 @@ class VertxHttpRequest extends BaseHttpRequest {
     public HttpHeaders getHttpHeaders() {
       MultivaluedMap map = new MultivaluedHashMap<>();
       request.headers().forEach(e -> map.add(e.getKey(), e.getValue()));
-      return new ResteasyHttpHeaders(map);
+      HashMap<String, Cookie> cookieHashMap = new HashMap<>();
+      Object cookie = map.getFirst("Cookie");
+      if (cookie != null) {
+        CookieParser.parseCookies(String.valueOf(cookie))
+          .forEach(c -> cookieHashMap.put(c.getName(), c));
+      }
+      return new ResteasyHttpHeaders(map, cookieHashMap);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.deephacks.vertxrs;
 
+import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import org.junit.Test;
 
@@ -20,6 +21,15 @@ public class ResourceTest extends BaseTest {
   @Test
   public void testQuery() throws Exception {
     assertEquals("val", GET("/query?param=val").body().string());
+  }
+
+  @Test
+  public void testCookie() throws Exception {
+    Request request = new Request.Builder().get()
+      .url(config.getRestHttpHostPortUrl("/cookie"))
+      .header("Cookie", "cookie=cookieVal; cookie2=cookieVal2")
+      .build();
+    assertEquals("cookieVal cookieVal2", client.newCall(request).execute().body().string());
   }
 
   @Test
