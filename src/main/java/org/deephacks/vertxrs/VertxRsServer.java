@@ -13,18 +13,17 @@
  */
 package org.deephacks.vertxrs;
 
+import io.vertx.core.impl.VertxFactoryImpl;
 import org.jboss.resteasy.core.SynchronousDispatcher;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.Vertx;
-import org.vertx.java.core.VertxFactory;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.http.HttpServer;
-import org.vertx.java.core.http.HttpServerRequest;
-import org.vertx.java.core.json.JsonArray;
-import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.sockjs.SockJSServer;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 
 import javax.ws.rs.core.Application;
 import java.io.File;
@@ -36,7 +35,7 @@ public class VertxRsServer {
   private final Config config;
   private final Map<String, Handler<Message>> sockJsServices;
   private final ResteasyDeployment resteasy;
-  private SockJSServer sockJSServer;
+  // private SockJSServer sockJSServer;
 
   private VertxRsServer(Builder builder) {
     this.config = Optional.ofNullable(builder.config).orElse(Config.defaultConfig());
@@ -48,7 +47,7 @@ public class VertxRsServer {
         return builder.resources;
       }
     });
-    this.vertx = VertxFactory.newVertx();
+    this.vertx = new VertxFactoryImpl().vertx();
     this.sockJsServices = builder.sockJsServices;
   }
 
@@ -61,12 +60,12 @@ public class VertxRsServer {
       HttpServer httpServer = vertx.createHttpServer();
       httpServers.add(httpServer);
       httpServer.requestHandler(handleBody());
-      JsonObject path = new JsonObject().putString("prefix", config.getSockJsPath());
-      JsonArray permitted = new JsonArray();
+//      JsonObject path = new JsonObject().put("prefix", config.getSockJsPath());
+//      JsonArray permitted = new JsonArray();
       // Let everything through
-      permitted.add(new JsonObject());
-      sockJSServer = vertx.createSockJSServer(httpServer).bridge(path, permitted, permitted);
-      sockJsServices.forEach((address, handler) -> vertx.eventBus().registerHandler(address, handler));
+//      permitted.add(new JsonObject());
+//      sockJSServer = vertx.createSockJSServer(httpServer).bridge(path, permitted, permitted);
+//      sockJsServices.forEach((address, handler) -> vertx.eventBus().registerHandler(address, handler));
       httpServer.listen(config.getHttpPort(), config.getHttpHost());
     }
     ShutdownHook.install(new Thread(() -> VertxRsServer.this.stop()));
@@ -74,11 +73,11 @@ public class VertxRsServer {
 
   public void stop() {
     resteasy.stop();
-    if (sockJSServer != null) {
-      sockJSServer.close();
-    }
+//    if (sockJSServer != null) {
+//      sockJSServer.close();
+//    }
     httpServers.forEach(HttpServer::close);
-    vertx.stop();
+    vertx.close();
   }
 
   public Vertx getVertx() {

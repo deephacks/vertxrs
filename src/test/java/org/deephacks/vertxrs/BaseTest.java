@@ -23,7 +23,7 @@ public class BaseTest {
               .withResource(new TypesafeJaxrsTest.TypesafeResource())
               .withProvider(new ExceptionMapperTest.ExceptionMapper())
               .withProvider(new Jackson2JsonpInterceptor())
-              .withSockJs("test", new TestResource())
+              //.withSockJs("test", new TestResource())
               .build();
       vertxrs.start();
     }

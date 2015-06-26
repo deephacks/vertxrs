@@ -1,18 +1,7 @@
 package org.deephacks.vertxrs;
 
-import org.junit.Test;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.eventbus.Message;
-
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.LockSupport;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 public class SockJsTest extends BaseTest {
-
+/*
   @Test
   public void testSockJs() {
     EventBus eventBus = vertxrs.getVertx().eventBus();
@@ -26,4 +15,5 @@ public class SockJsTest extends BaseTest {
     LockSupport.park(thread);
     assertThat(result.get(), is("{\"value\":\"hello\"}"));
   }
+  */
 }

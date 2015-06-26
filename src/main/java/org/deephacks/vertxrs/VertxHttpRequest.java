@@ -18,14 +18,15 @@ import org.jboss.resteasy.plugins.server.BaseHttpRequest;
 import org.jboss.resteasy.specimpl.ResteasyHttpHeaders;
 import org.jboss.resteasy.spi.*;
 import org.jboss.resteasy.util.CookieParser;
-import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.http.HttpServerRequest;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpServerRequest;
 
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.*;
 
 class VertxHttpRequest extends BaseHttpRequest {
@@ -38,7 +39,7 @@ class VertxHttpRequest extends BaseHttpRequest {
                             HttpServerRequest request,
                             VertxHttpResponse response,
                             SynchronousDispatcher dispatcher) {
-      super(new ResteasyUriInfo(request.absoluteURI()));
+      super(new ResteasyUriInfo(URI.create(request.absoluteURI())));
       this.request = request;
       this.executionContext = new VertxExecutionContext(this, response, dispatcher);
       this.body = new ByteBufInputStream(body.getByteBuf());
@@ -78,7 +79,7 @@ class VertxHttpRequest extends BaseHttpRequest {
 
     @Override
     public String getHttpMethod() {
-      return request.method();
+      return request.method().name();
     }
 
     @Override

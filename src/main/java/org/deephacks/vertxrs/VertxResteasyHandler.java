@@ -4,9 +4,9 @@ package org.deephacks.vertxrs;
 import org.jboss.resteasy.core.SynchronousDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.http.HttpServerRequest;
+import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpServerRequest;
 
 public class VertxResteasyHandler implements Handler<Buffer> {
   private Logger logger = LoggerFactory.getLogger(VertxResteasyHandler.class);

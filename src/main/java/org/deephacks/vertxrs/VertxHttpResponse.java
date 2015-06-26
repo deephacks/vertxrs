@@ -19,9 +19,9 @@ import io.netty.handler.codec.http.HttpHeaders.Values;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.resteasy.specimpl.MultivaluedMapImpl;
 import org.jboss.resteasy.spi.*;
-import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.http.HttpServerRequest;
-import org.vertx.java.core.http.HttpServerResponse;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.HttpServerResponse;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
@@ -51,7 +51,7 @@ class VertxHttpResponse implements HttpResponse {
     this.providerFactory = providerFactory;
     this.underlyingOutputStream = new ByteBufOutputStream(Unpooled.buffer());
     this.outputStream = underlyingOutputStream;
-    this.buffer = new Buffer(underlyingOutputStream.buffer());
+    this.buffer = Buffer.buffer(underlyingOutputStream.buffer());
     this.request = request;
     this.outputHeaders = new MultivaluedMapImpl<>();
     this.keepAlive = isKeepAlive(request);

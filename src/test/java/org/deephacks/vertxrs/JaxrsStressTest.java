@@ -1,9 +1,10 @@
 package org.deephacks.vertxrs;
 
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
 import org.deephacks.vertxrs.TestResource.Data;
 import org.junit.Test;
-import org.vertx.java.core.Vertx;
-import org.vertx.java.core.http.HttpClient;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -47,7 +48,7 @@ public class JaxrsStressTest {
     Vertx vertx = vertxrs.getVertx();
     CountDownLatch latch = new CountDownLatch(multiplier * connections);
     for (int j = 0; j < connections; j++) {
-      HttpClient client = vertx.createHttpClient().setPort(8081).setHost("localhost");
+      HttpClient client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8081).setDefaultHost("localhost"));
       for (int i = 0; i < multiplier; i++) {
         String json = "{\"name\":\"name\", \"value\":\"value" + String.format("%07d", i) + "\"}";
         client.post("/rest/stress/" + path, event -> {

@@ -1,8 +1,7 @@
 package org.deephacks.vertxrs;
 
-
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.Message;
+import io.vertx.core.Handler;
+import io.vertx.core.eventbus.Message;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
