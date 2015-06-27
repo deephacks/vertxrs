@@ -24,7 +24,7 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 
 public class JaxrsStressTest {
   static VertxRsServer vertxrs;
-  static int multiplier = 10;
+  static int multiplier = 5;
   static int connections = Runtime.getRuntime().availableProcessors() * multiplier;
 
   static {
