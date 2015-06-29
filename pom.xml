@@ -28,6 +28,7 @@
     <connection>scm:git:git@github.com:deephacks/vertxrs.git</connection>
     <developerConnection>scm:git:git@github.com:deephacks/vertxrs.git</developerConnection>
     <url>scm:git:git@github.com/deephacks/vertxrs</url>
+    <tag>HEAD</tag>
   </scm>
   <licenses>
     <license>
