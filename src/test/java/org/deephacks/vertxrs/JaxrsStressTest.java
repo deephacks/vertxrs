@@ -5,6 +5,7 @@ import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
 import org.deephacks.vertxrs.TestResource.Data;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -34,12 +35,12 @@ public class JaxrsStressTest {
     vertxrs.start();
   }
 
-  @Test
+  @Ignore
   public void stressTestAsync() throws Exception {
     execute("async");
   }
 
-  @Test
+  @Ignore
   public void stressTestSync() throws Exception {
     execute("sync");
   }
